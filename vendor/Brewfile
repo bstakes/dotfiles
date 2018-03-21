@@ -1,0 +1,47 @@
+cask_args appdir: "/Applications"
+tap "caskroom/cask"
+
+cask "atom"
+cask "emacs"
+cask "google-chrome"
+cask "hammerspoon"
+cask "iterm2"
+cask "java8"
+cask "lastpass"
+cask "slack"
+cask "spotify"
+cask "sublime-text"
+cask "vagrant"
+cask "virtualbox"
+cask "virtualbox-extension-pack"
+cask "visual-studio-code"
+
+brew "ack"
+brew "coreutils"
+brew "ctags"
+brew "git"
+brew "jq"
+brew "less"
+brew "make"
+brew "perl"
+brew "python"
+brew "thefuck"
+brew "the_silver_searcher"
+brew "tmux"
+brew "tree"
+brew "unzip"
+brew "vim", args: ["override-system-vi"]
+brew "zsh"
+
+tap "homebrew/dupes"
+brew "diffutils"
+brew "gawk"
+brew "gnu-tar", args:["with-default-names"]
+brew "gnu-which", args:["with-default-names"]
+brew "grep", args:["with-default-names"]
+brew "watch"
+brew "wget"
+
+# App Store
+brew "mas"
+mas "amphetamine", id: 937984704
