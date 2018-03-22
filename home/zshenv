@@ -1,5 +1,5 @@
-export PATH="$(brew --prefix coreutils)/libexec/gnubin:$PATH"
-export MANPATH="$(brew --prefix coreutils)/libexec/gnuman:$MANPATH"
+export PATH="$(/usr/local/bin/brew --prefix coreutils)/libexec/gnubin:$PATH"
+export MANPATH="$(/usr/local/bin/brew --prefix coreutils)/libexec/gnuman:$MANPATH"
 
 export EDITOR="vim"
 export PAGER="less -R"
