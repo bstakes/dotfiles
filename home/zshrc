@@ -16,6 +16,16 @@ zstyle ':vcs_info:git:*' formats "%{$fg_bold[red]%}[%u%c]%{$reset_color%}%{$fg_b
 # tab complete case insensitive
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
 
+# history options
+HISTSIZE=1000
+SAVEHIST=1000
+HISTFILE=~/.history
+setopt EXTENDED_HISTORY
+setopt INC_APPEND_HISTORY
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_IGNORE_SPACE
+
+
 # https://dougblack.io/words/zsh-vi-mode.html
 function zle-line-init zle-keymap-select {
   VIM_PROMPT="%{$fg_bold[yellow]%}[% NORMAL]% %{$reset_color%}"
