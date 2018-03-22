@@ -1,5 +1,5 @@
 #!/usr/bin/env zsh
-export PS1="%~ > "
+export PS1="%{$fg_bold[white]%}%~ > %{$reset_color%}"
 
 autoload -Uz compinit && compinit
 autoload -U colors && colors
@@ -12,13 +12,13 @@ zstyle ':vcs_info:git:*' formats '%b'
 
 # https://dougblack.io/words/zsh-vi-mode.html
 function zle-line-init zle-keymap-select {
-  VIM_PROMPT="%{$fg_bold[yellow]%} [% NORMAL]% %{$reset_color%}"
+  VIM_PROMPT="%{$fg_bold[yellow]%}[% NORMAL]% %{$reset_color%}"
   if [[ -z "$vcs_info_msg_0_" ]]; then
     VCS_PROMPT=""
   else
-    VCS_PROMPT="%{$fg_bold[green]%} [% $vcs_info_msg_0_]% %{$reset_color%}"
+    VCS_PROMPT="%{$fg_bold[green]%}[% $vcs_info_msg_0_]% %{$reset_color%}"
   fi
-  RPS1="${${KEYMAP/vicmd/$VIM_PROMPT}/(main|viins)/} $VCS_PROMPT $EPS1"
+  RPS1="${${KEYMAP/vicmd/$VIM_PROMPT}/(main|viins)/}$VCS_PROMPT$EPS1"
   zle reset-prompt
 }
 
