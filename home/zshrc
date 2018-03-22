@@ -13,6 +13,8 @@ zstyle ':vcs_info:git:*' check-for-changes 'true'
 zstyle ':vcs_info:git:*' stagedstr "S"
 zstyle ':vcs_info:git:*' unstagedstr "*"
 zstyle ':vcs_info:git:*' formats "%{$fg_bold[red]%}[%u%c]%{$reset_color%}%{$fg_bold[green]%}[%b]%{$reset_color%}"
+# tab complete case insensitive
+zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
 
 # https://dougblack.io/words/zsh-vi-mode.html
 function zle-line-init zle-keymap-select {
