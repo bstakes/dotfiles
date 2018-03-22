@@ -8,17 +8,16 @@ autoload -Uz vcs_info
 precmd_vcs_info() { vcs_info }
 precmd_functions+=( precmd_vcs_info )
 setopt prompt_subst
-zstyle ':vcs_info:git:*' formats '%b'
+# git prompt helper
+zstyle ':vcs_info:git:*' check-for-changes 'true'
+zstyle ':vcs_info:git:*' stagedstr "S"
+zstyle ':vcs_info:git:*' unstagedstr "*"
+zstyle ':vcs_info:git:*' formats "%{$fg_bold[red]%}[%u%c]%{$reset_color%}%{$fg_bold[green]%}[%b]%{$reset_color%}"
 
 # https://dougblack.io/words/zsh-vi-mode.html
 function zle-line-init zle-keymap-select {
   VIM_PROMPT="%{$fg_bold[yellow]%}[% NORMAL]% %{$reset_color%}"
-  if [[ -z "$vcs_info_msg_0_" ]]; then
-    VCS_PROMPT=""
-  else
-    VCS_PROMPT="%{$fg_bold[green]%}[% $vcs_info_msg_0_]% %{$reset_color%}"
-  fi
-  RPS1="${${KEYMAP/vicmd/$VIM_PROMPT}/(main|viins)/}$VCS_PROMPT$EPS1"
+  RPS1="${${KEYMAP/vicmd/$VIM_PROMPT}/(main|viins)/}${vcs_info_msg_0_/"[]"/}$EPS1"
   zle reset-prompt
 }
 
