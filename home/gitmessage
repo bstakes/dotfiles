@@ -1,0 +1,31 @@
+##################################################
+# summary TITLE - no more than 50 characters     |
+# ---------------------------------------------- v
+TITLE
+
+# Issue number in brackets
+[XXX-YYYY]
+
+# Why is this change necessary? - no more than 72 characters            |
+# asterisk (*) for bullet points                                        |
+# --------------------------------------------------------------------- v
+
+Why:
+
+*
+
+# --------------------------------------------------------------------- ^
+# 72-character wrapped descriptions                                     |
+#                                                                       |
+# What did you do to address the need? - no more than 72 characters     |
+# asterisk (*) for bullet points                                        |
+# Write in imperative e.g. Fix the font size vs. Fixed the font size    |
+# --------------------------------------------------------------------- v
+
+This change addresses the need by:
+
+*
+
+# --------------------------------------------------------------------- ^
+# 72-character wrapped descriptions                                     |
+#########################################################################
