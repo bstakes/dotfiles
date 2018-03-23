@@ -7,7 +7,6 @@ cask "google-chrome"
 cask "hammerspoon"
 cask "iterm2"
 cask "java8"
-cask "lastpass"
 cask "slack"
 cask "spotify"
 cask "sublime-text"
@@ -46,3 +45,4 @@ brew "wget"
 # App Store
 brew "mas"
 mas "amphetamine", id: 937984704
+mas "lastpass", id: 926036361
