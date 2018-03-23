@@ -17,6 +17,7 @@ cask "virtualbox-extension-pack"
 cask "visual-studio-code"
 
 brew "ack"
+brew "cask"                # emacs package manager
 brew "coreutils"
 brew "ctags"
 brew "git"
