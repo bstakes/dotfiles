@@ -41,3 +41,10 @@ eval "$(thefuck --alias)"
 # vi mode
 bindkey -v
 export KEYTIMEOUT=1
+
+setopt EXTENDED_GLOB
+
+for srcfile in "${ZDOTDIR:-$HOME}"/.dotfiles/home/local-zsh/^README.md(N); do
+  source "$srcfile"
+done
+
