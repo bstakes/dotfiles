@@ -24,6 +24,7 @@ brew "git"
 brew "jq"
 brew "less"
 brew "make"
+brew "multimarkdown"
 brew "perl"
 brew "python"
 brew "thefuck"
@@ -46,5 +47,6 @@ brew "wget"
 
 # App Store
 brew "mas"
-mas "amphetamine", id: 937984704
-mas "lastpass", id: 926036361
+mas "Amphetamine", id: 937984704
+mas "LastPass", id: 926036361
+mas "Spark", id: 1176895641
