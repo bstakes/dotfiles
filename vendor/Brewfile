@@ -15,10 +15,11 @@ cask "virtualbox"
 cask "virtualbox-extension-pack"
 cask "visual-studio-code"
 
+tap "universal-ctags/universal-ctags"
+
 brew "ack"
 brew "cask"                # emacs package manager
 brew "coreutils"
-brew "ctags"
 brew "git"
 brew "jq"
 brew "less"
@@ -29,6 +30,7 @@ brew "thefuck"
 brew "the_silver_searcher"
 brew "tmux"
 brew "tree"
+brew "universal-ctags/universal-ctags/universal-ctags", args: ["HEAD"]
 brew "unzip"
 brew "vim", args: ["override-system-vi"]
 brew "zsh"
