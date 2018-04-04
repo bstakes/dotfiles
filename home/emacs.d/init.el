@@ -24,6 +24,7 @@
 (require 'cask "/usr/local/share/emacs/site-lisp/cask/cask.el")
 (cask-initialize)
 
+(add-to-list 'custom-theme-load-path "~/.emacs.d/theme")
 (require 'use-package)
 
 ;; ui tweaks
@@ -51,27 +52,44 @@
 (setq auto-save-file-name-transforms
       '((".*" "~/.emacs-backup/" t)))
 
+;; set font
+(set-face-attribute 'default t :font "Input Mono-12")
+(set-face-attribute 'default t :weight 'light)
+
+
 (use-package exec-path-from-shell
   :if (memq window-system '(mac ns))
   :config
   (exec-path-from-shell-initialize))
+
+(use-package diminish)
+
 (use-package doom-themes
-  :ensure t
   :init (load-theme 'doom-peacock t))
 
 (use-package solaire-mode
-  :ensure t
   :init (solaire-mode)
   :config (add-hook 'after-change-major-mode-hook 'turn-on-solaire-mode))
 
-(use-package powerline
-  :ensure t)
+(use-package powerline)
 
 (use-package airline-themes
-  :ensure t
   :init
   (require 'airline-themes)
-  (load-theme 'airline-doom-one t))
+  (load-theme 'airline-doom-peacock t)
+  :config
+  (set-face-attribute 'mode-line          nil :font "Source Code Pro for Powerline")
+  (set-face-attribute 'mode-line-inactive nil :font "Source Code Pro for Powerline")
+  (setq powerline-utf-8-separator-left        #xe0b0
+        powerline-utf-8-separator-right       #xe0b2
+        airline-utf-glyph-separator-left      #xe0b0
+        airline-utf-glyph-separator-right     #xe0b2
+        airline-utf-glyph-subseparator-left   #xe0b1
+        airline-utf-glyph-subseparator-right  #xe0b3
+        airline-utf-glyph-branch              #xe0a0
+        airline-utf-glyph-readonly            #xe0a2
+        airline-utf-glyph-linenumber          #xe0a1))
+
 (use-package projectile
   :diminish projectile-mode
   :config
@@ -83,6 +101,7 @@
   :config
   (setq helm-ff-candidate-number-limit 500)
   (setq helm-input-idle-delay 0.40))
+
 (use-package helm-projectile
   :config
   (evil-leader/set-key
@@ -91,6 +110,7 @@
     "pe" 'helm-projectile-recentf
     "po" 'helm-projectile-switch-project
     "pb" 'helm-projectile-switch-to-buffer))
+
 (use-package evil-leader
   :init (global-evil-leader-mode)
   :config
@@ -106,8 +126,7 @@
 (add-hook 'clojure-mode-hook 'prettify-symbols-mode)
 
 (use-package paredit
-  :ensure t
-  :init
+  :diminish paredit-mode
   :init
   (add-hook 'clojure-mode-hook 'enable-paredit-mode)
   (add-hook 'cider-repl-mode-hook 'enable-paredit-mode)

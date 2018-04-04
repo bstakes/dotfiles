@@ -17,6 +17,4 @@ else
   echo "Not on macOS. Skipping mac packages."
 fi
 
-# change shell to zsh installed by homebrew
-
-
+./install-fonts.sh
