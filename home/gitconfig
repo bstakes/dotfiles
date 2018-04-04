@@ -2,3 +2,6 @@
   excludesfile = ~/.gitignore_global
 [commit]
   template = ~/.gitmessage
+[user]
+	name = Brian Stakes
+	email = bstakes@barracuda.com
