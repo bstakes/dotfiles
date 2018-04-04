@@ -51,6 +51,10 @@
 (setq auto-save-file-name-transforms
       '((".*" "~/.emacs-backup/" t)))
 
+(use-package exec-path-from-shell
+  :if (memq window-system '(mac ns))
+  :config
+  (exec-path-from-shell-initialize))
 (use-package doom-themes
   :ensure t
   :init (load-theme 'doom-peacock t))
@@ -68,7 +72,25 @@
   :init
   (require 'airline-themes)
   (load-theme 'airline-doom-one t))
+(use-package projectile
+  :diminish projectile-mode
+  :config
+  (projectile-global-mode)
+  (setq projectile-switch-project-action 'projectile-vc)
+  (setq projectile-enable-caching t))
 
+(use-package helm
+  :config
+  (setq helm-ff-candidate-number-limit 500)
+  (setq helm-input-idle-delay 0.40))
+(use-package helm-projectile
+  :config
+  (evil-leader/set-key
+    "pp"  'helm-projectile-find-file
+    "ps" 'helm-projectile-ag
+    "pe" 'helm-projectile-recentf
+    "po" 'helm-projectile-switch-project
+    "pb" 'helm-projectile-switch-to-buffer))
 (use-package evil-leader
   :init (global-evil-leader-mode)
   :config
@@ -76,9 +98,10 @@
   (evil-leader/set-key "gs" 'magit-status))
 
 (use-package evil
-  :requires evil-leader
-  :ensure t
-  :init (evil-mode 1))
+  :init (evil-mode 1)
+  :config
+  (define-key evil-normal-state-map "gf" 'helm-projectile-find-file-dwim)
+  (evil-ex-define-cmd "ls" 'helm-mini))
 
 (add-hook 'clojure-mode-hook 'prettify-symbols-mode)
 
