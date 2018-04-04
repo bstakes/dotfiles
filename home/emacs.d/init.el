@@ -152,6 +152,7 @@
       "(do (require 'figwheel-sidecar.repl-api)
            (figwheel-sidecar.repl-api/start-figwheel!)
            (figwheel-sidecar.repl-api/cljs-repl))")
+  (setq nrepl-use-ssh-fallback-for-remote-hosts 't)
   (setq cider-popup-stacktraces-in-repl t)
   (setq cider-auto-select-error-buffer nil)
   (setq cider-repl-use-pretty-printing t))
