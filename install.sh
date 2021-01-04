@@ -8,5 +8,9 @@ rm "${ZDOTDIR:-$HOME}"/*(-@D)
 
 # Link all dotfiles to those in this repo.
 for rcfile in "${ZDOTDIR:-$HOME}"/.dotfiles/home/^README.md(N); do
-  ln -fsnv "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
+  if ! [ -e "${ZDOTDIR:-$HOME}/.${rcfile:t}" ]; then
+    ln -fsnv "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
+  else
+    echo skipping ${rcfile}
+  fi
 done

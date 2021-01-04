@@ -4,7 +4,14 @@
 -- end)
 
 local hammerspoon = os.getenv("HOME") .. "/.hammerspoon/"
-local watchingRadii = false
+
+-- require and install cli runner
+require("hs.ipc")
+hs.ipc.cliInstall()
+
+hs.ipc.localPort("growl-listener", function(_, _, msg)
+	hs.notify.new({title="Growl Message", informativeText=msg}):send()
+    end)
 
 -- require all lua files in home dir
 for file in hs.fs.dir(hammerspoon) do
@@ -89,11 +96,10 @@ function layoutFourK()
 
     local fourKLayout = {
         {"Spotify", nil, fourK, middle, nil, nil},
-        {"iTerm", nil, fourK, bottomRight, nil, nil},
+        {"kitty", nil, fourK, bottomRight, nil, nil},
         {"Slack", nil, fourK, middle, nil, nil},
-        {"Sequel Pro", nil, fourK, middle, nil, nil},
-        {"Evernote", nil, fourK, middle, nil, nil},
-        {"Google Chrome", nil, fourK, upperRight, nil, nil},
+        {"Emacs", nil, fourK, upperRight, nil, nil},
+        {"Vivaldi", nil, fourK, leftHalf, nil, nil},
     }
 
     hs.layout.apply(fourKLayout)
@@ -106,13 +112,12 @@ function layoutFourK()
 end
 
 function focusedWindowToLaptop()
-    hs.window.focusedWindow():moveToScreen(69732482)
+    hs.window.focusedWindow():moveToScreen("Color LCD")
     screenFull()
-
 end
 
 function focusedWindowTo4k()
-    hs.window.focusedWindow():moveToScreen(459115967)
+    hs.window.focusedWindow():moveToScreen("31MU97", true, true)
     screenTopLeft()
     screenCenter()
 end

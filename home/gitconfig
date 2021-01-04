@@ -3,5 +3,8 @@
 [commit]
   template = ~/.gitmessage
 [user]
-	name = Brian Stakes
-	email = bstakes@barracuda.com
+  name = Brian Stakes
+  email = bstakes@barracuda.com
+[alias]
+  co = checkout
+  cob = checkout -b
