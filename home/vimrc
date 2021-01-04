@@ -1,0 +1,111 @@
+execute pathogen#infect()
+execute pathogen#helptags()
+
+syntax on
+filetype plugin indent on
+
+set background=dark
+colorscheme gruvbox
+highlight LineNr ctermbg=235
+highlight VertSplit ctermfg=236 ctermbg=236 cterm=NONE
+highlight StatusLine ctermfg=231 ctermbg=236 cterm=bold
+highlight StatusLineNC ctermfg=231 ctermbg=236 cterm=none
+
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set expandtab
+set number
+set incsearch
+set backspace=indent,eol,start
+
+" normalize swap/backup file location
+set directory=$HOME/.vim/swap//
+set backupdir=$HOME/.vim/backup//
+
+let mapleader = "-"
+
+set tags+=tags
+" allow find to work anywhere in current path
+set path^=**/*
+
+let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:25,results:25'
+let g:ctrlp_cmd = 'CtrlPMixed'
+let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_extensions = ['tag', 'buffertag']
+let g:ctrlp_use_caching = 0
+
+if executable('ag')
+    set grepprg=ag\ --nogroup\ --nocolor
+    let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+endif
+
+" slimey tmux stuff
+let g:slime_target = "tmux"
+let tmuxsession=$TMUX
+if tmuxsession !=# ""
+    let g:slime_default_config = {"socket_name": split(tmuxsession, ",")[0], "target_pane": ":.1"}
+    let g:slime_dont_ask_default = 1
+endif
+
+" clj get doc in repl
+nmap <leader>cd :REPLDoc<CR>
+
+if !exists('*REPLDoc')
+function REPLDoc()
+    let cfiletype = &filetype
+    if cfiletype ==# "clojure"
+        execute "normal! msyiwGo(doc )\<ESC>P"
+    elseif cfiletype ==# "php"
+        execute "normal! msyiwGodoc \<ESC>p"
+    else
+        echom "can't get the docs"
+        return 0
+    endif
+    SlimeSendCurrentLine
+    execute "undo"
+    execute "normal! `s"
+endfunction
+command! REPLDoc call REPLDoc()
+endif
+
+if executable('ag')
+    let g:ackprg = 'ag --vimgrep'
+endif
+
+noremap <leader>php :set syntax=php<CR>
+noremap <leader>f :Ack!<Space>''<Left>
+noremap <leader>F :Ack!<Space>'<cword>'<Left>
+command! CtrlPBufSearch call CtrlPBufSearch()
+noremap <leader>r :CtrlPBufTag
+noremap <leader>R :CtrlPBufSearch<CR>
+noremap <leader>cf :!echo % \| pbcopy<CR><CR>
+vnoremap <leader>y :w !pbcopy<CR><CR>
+
+" low rent line comment
+noremap <leader>// :s/^\(\s*\)/\1\/\/ /<CR>
+" low rent line uncomment
+noremap <leader>/ :s/^\(\s*\)\/\/ \?/\1/<CR>
+
+" build the ctrlp index on start
+autocmd VimEnter * call CtrlPIndex()
+" remove trailing whitespace on save of all files
+autocmd BufWritePre * %s/\s\+$//ge
+
+if !exists('*CtrlPIndex')
+function CtrlPIndex()
+    exec ":CtrlPMixed"
+    exec "normal \<ESC>"
+endfunction
+endif
+
+if !exists('*CtrlPBufSearch')
+function CtrlPBufSearch()
+    let g:ctrlp_default_input = expand('<cword>')
+    CtrlPBufTag
+    let g:ctrlp_default_input = ''
+endfunction
+endif
+
+autocmd FileType gitcommit setlocal spell textwidth=72
+
