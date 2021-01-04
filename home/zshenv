@@ -1,5 +1,7 @@
 export PATH="$(/usr/local/bin/brew --prefix coreutils)/libexec/gnubin:$PATH"
 export MANPATH="$(/usr/local/bin/brew --prefix coreutils)/libexec/gnuman:$MANPATH"
+export PATH="$HOME/.jenv/bin:$PATH"
+export PATH="$PATH:$HOME/.vim/plugged/vim-iced/bin"
 
 export EDITOR="vim"
 export PAGER="less -R"

@@ -1,8 +1,17 @@
 #!/usr/bin/env zsh
 
+export FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
+
 autoload -Uz compinit && compinit
 autoload -U colors && colors
 autoload -Uz vcs_info
+
+autoload -U up-line-or-beginning-search
+autoload -U down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+bindkey "^[[A" up-line-or-beginning-search # Up
+bindkey "^[[B" down-line-or-beginning-search # Down
 
 # tab complete case insensitive
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
@@ -36,18 +45,44 @@ precmd_functions+=( precmd_vcs_info )
 setopt prompt_subst
 # git prompt helper
 zstyle ':vcs_info:git:*' check-for-changes 'true'
-zstyle ':vcs_info:git:*' stagedstr "S"
-zstyle ':vcs_info:git:*' unstagedstr "*"
-zstyle ':vcs_info:git:*' formats "%{$fg_bold[red]%}[%u%c]%{$reset_color%}%{$fg_bold[green]%}[%b]%{$reset_color%}"
+zstyle ':vcs_info:git:*' stagedstr $(print -n "\u2B06")
+zstyle ':vcs_info:git:*' unstagedstr $(print -n "\u2717")
+zstyle ':vcs_info:git:*' formats "%{$fg_bold[red]%}[%u%c]%{$reset_color%}%{$bg[bg_default]%}%{$fg_bold[blue]%}[%b]%{$reset_color%}"
 
 # https://dougblack.io/words/zsh-vi-mode.html
 function zle-line-init zle-keymap-select {
   VIM_PROMPT="%{$fg_bold[yellow]%}[% NORMAL]% %{$reset_color%}"
-  RPS1="${${KEYMAP/vicmd/$VIM_PROMPT}/(main|viins)/}${vcs_info_msg_0_/"[]"/}$EPS1"
+  CHECK=$(print -n "\u2714")
+  GREEN_CHECK="%{$fg_bold[green]%}[$CHECK]%{$reset_color%}"
+  RPS1="${${KEYMAP/vicmd/$VIM_PROMPT}/(main|viins)/}${vcs_info_msg_0_/"[]"/"$GREEN_CHECK"}$EPS1"
   zle reset-prompt
 }
 
 WHITE_STAR="\u2606"
 BLACK_STAR="\u2605"
 
-export PS1="%(?.%{$fg_bold[blue]%}.%{$fg_bold[red]%})%~ %{$bg[black]$fg[green]%}"$(print -n $BLACK_STAR )" %{$reset_color%}"
+export PS1="%(?.%{$fg_bold[blue]%}.%{$fg_bold[red]%})%~ %{$bg[bg_default]$fg[green]%}"$(print $BLACK_STAR)" %{$reset_color%}"
+
+alias ls='ls -G'
+
+###############
+# git aliases #
+###############
+# rebase onto master
+alias grbm='git rebase master'
+# checkout
+alias gc-='git co -'
+alias gco='git co'
+alias gcom='git co master'
+alias gcb='git cob'
+# status
+alias gst='git status'
+# log
+alias gl='git log'
+# commit
+alias gci='git commit'
+alias first='en dev-fir-us kst'
+
+function firsh() {
+  en dev-fir-us kssh $@
+}
