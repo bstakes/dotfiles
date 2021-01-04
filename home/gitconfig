@@ -2,3 +2,6 @@
   excludesfile = ~/.gitignore_global
 [commit]
   template = ~/.gitmessage
+[alias]
+  co = checkout
+  cob = checkout -b
