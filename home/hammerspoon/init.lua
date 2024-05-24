@@ -5,13 +5,20 @@
 
 local hammerspoon = os.getenv("HOME") .. "/.hammerspoon/"
 
--- require and install cli runner
-require("hs.ipc")
-hs.ipc.cliInstall()
+hs.loadSpoon("SpoonInstall")
+spoon.SpoonInstall.use_syncinstall = true
+Install=spoon.SpoonInstall
 
-hs.ipc.localPort("growl-listener", function(_, _, msg)
-	hs.notify.new({title="Growl Message", informativeText=msg}):send()
-    end)
+Install:andUse("Seal",
+               {
+                 hotkeys = { show = { {"alt"}, "space"} },
+                 fn = function(s)
+                   s:loadPlugins({"apps", "calc"})
+                   s:refreshAllCommands()
+                 end,
+                 start = true,
+               }
+)
 
 -- require all lua files in home dir
 for file in hs.fs.dir(hammerspoon) do
@@ -40,31 +47,6 @@ function reloadConfig(files)
         reload(true)
     end
 end
-
-defaultAudioDevice = hs.audiodevice.defaultInputDevice()
-muteMenu = hs.menubar.new()
-micIsOn = hammerspoon .. "assets/microphone-of-voice.png"
-micIsOff = hammerspoon .. "assets/turn-microphone-off-button.png"
-if defaultAudioDevice:inputMuted() then
-    micIcon = micIsOff
-else
-    micIcon = micIsOn
-end
-
-muteMenu:setIcon(micIcon)
-
-
-function muteInput()
-    if defaultAudioDevice:inputMuted() then
-        defaultAudioDevice:setMuted(false)
-        muteMenu:setIcon(micIsOn)
-    else
-        defaultAudioDevice:setMuted(true)
-        muteMenu:setIcon(micIsOff)
-    end
-end
-
-muteMenu:setClickCallback(muteInput)
 
 hs.pathwatcher.new(hammerspoon, reloadConfig):start()
 if (hs.settings.get("showReloadMessage") == true) then
@@ -112,7 +94,7 @@ function layoutFourK()
 end
 
 function focusedWindowToLaptop()
-    hs.window.focusedWindow():moveToScreen("Color LCD")
+    hs.window.focusedWindow():moveToScreen("Built%-in Retina Display")
     screenFull()
 end
 
@@ -123,7 +105,7 @@ function focusedWindowTo4k()
 end
 
 function goToBrowser()
-    local browser = "Google Chrome"
+    local browser = "Vivaldi"
     hs.application.launchOrFocus(browser)
     hs.mouse.setAbsolutePosition({ x=2500, y=500 })
 
@@ -146,11 +128,9 @@ keyBindings = {
         { key = "L", fn = focusedWindowToLaptop },
         -- move focused window to 4k
         { key = "K", fn = focusedWindowTo4k },
-        -- mute screenhero
-        { key = "M", fn = muteInput },
         { key = "G", fn = goToBrowser },
-        { key = "T", fn = function() hs.application.launchOrFocus("iTerm") end },
-        { key = "S", fn = function() hs.application.launchOrFocus("Sequel Pro") end }
+        { key = "T", fn = function() hs.application.launchOrFocus("Alacritty") end },
+        { key = "R", fn = function() reload(true) end },
     },
     ["cmd alt"] = {
         -- spectacle like move window to left half of the screen
