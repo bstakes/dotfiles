@@ -1,3 +1,18 @@
+set nocompatible
+set encoding=utf-8
+
+
+" Install vim-plug if not found
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+endif
+
+" Run PlugInstall if there are missing plugins
+autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+  \| PlugInstall --sync | source $MYVIMRC
+\| endif
+
 " Specify a directory for plugins
 call plug#begin('~/.vim/plugged')
 
@@ -16,20 +31,23 @@ Plug 'liquidz/vim-iced', {'for': 'clojure'}
 Plug 'luochen1990/rainbow', {'for': 'clojure'}
 Plug 'liquidz/vim-iced-coc-source', {'for': 'clojure'}
 
-
 Plug 'arcticicestudio/nord-vim'
+Plug 'catppuccin/vim', { 'as': 'catppuccin' }
 
 Plug 'kana/vim-altercmd'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
-Plug 'lilydjwg/tailf.vim'
+Plug 'rust-lang/rust.vim'
 
 Plug 'dense-analysis/ale'
 
 Plug 'tpope/vim-fugitive'
 
 Plug 'diepm/vim-rest-console'
+
+Plug 'plasticboy/vim-markdown'
+Plug 'https://github.com/towolf/vim-helm.git'
 
 call plug#end()
 
@@ -44,7 +62,9 @@ set directory=~/.vim/.swp//
 " global settings
 let mapleader = "-"
 let maplocalleader = "\\"
-colorscheme nord
+colorscheme catppuccin_frappe
+
+set termguicolors
 
 " make backspace work like you would expect in insert mode
 set backspace=indent,eol,start
@@ -68,6 +88,9 @@ call altercmd#define('ls', 'Buffers')
 
 nnoremap <leader>pp :<C-u>Files<CR>
 nnoremap <leader>ps :<C-u>Ag<CR>
+nnoremap <leader>d :<C-u>CocDiagnostics<CR>
+nnoremap <leader>lk :<C-u>lprevious<CR>
+nnoremap <leader>lj :<C-u>lnext<CR>
 
 let g:ale_linters = {'clojure': ['joker']}
 let g:ale_linters_explicit = 1
@@ -78,6 +101,13 @@ inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+
+" Use <c-space> to trigger completion.
+if has('nvim')
+    inoremap <silent><expr> <c-space> coc#refresh()
+else
+    inoremap <silent><expr> <c-@> coc#refresh()
+endif
 
 " use <tab> for trigger completion and navigate to the next complete item
 function! s:check_back_space() abort
@@ -93,3 +123,15 @@ inoremap <silent><expr> <Tab>
 autocmd BufNewFile,BufRead *.joke set filetype=clojure
 autocmd BufNewFile,BufRead *.bb set filetype=clojure
 autocmd FileType gitcommit setlocal spell textwidth=72
+
+set foldmethod=indent
+set foldlevelstart=99
+
+let g:rustfmt_autosave = 1
+let g:rustfmt_emit_files = 1
+let g:rustfmt_fail_silently = 0
+
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
