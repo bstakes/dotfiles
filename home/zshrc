@@ -17,13 +17,16 @@ bindkey "^[[B" down-line-or-beginning-search # Down
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
 
 # history options
-HISTSIZE=1000
-SAVEHIST=1000
-HISTFILE=~/.history
+export HISTSIZE=10000
+export SAVEHIST=10000
+export HISTFILE="$HOME/.history"
 setopt EXTENDED_HISTORY
-setopt INC_APPEND_HISTORY
+setopt INC_APPEND_HISTORY_TIME
 setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_SAVE_NO_DUPS
 setopt HIST_IGNORE_SPACE
+
+alias history='fc -l 1 | fzf'
 
 zle -N zle-line-init
 zle -N zle-keymap-select
@@ -40,21 +43,12 @@ for srcfile in "${ZDOTDIR:-$HOME}"/.dotfiles/home/local-zsh/^README.md(N); do
   source "$srcfile"
 done
 
-precmd_vcs_info() { vcs_info }
-precmd_functions+=( precmd_vcs_info )
-setopt prompt_subst
-# git prompt helper
-zstyle ':vcs_info:git:*' check-for-changes 'true'
-zstyle ':vcs_info:git:*' stagedstr $(print -n "\u2B06")
-zstyle ':vcs_info:git:*' unstagedstr $(print -n "\u2717")
-zstyle ':vcs_info:git:*' formats "%{$fg_bold[red]%}[%u%c]%{$reset_color%}%{$bg[bg_default]%}%{$fg_bold[blue]%}[%b]%{$reset_color%}"
-
 # https://dougblack.io/words/zsh-vi-mode.html
 function zle-line-init zle-keymap-select {
   VIM_PROMPT="%{$fg_bold[yellow]%}[% NORMAL]% %{$reset_color%}"
   CHECK=$(print -n "\u2714")
   GREEN_CHECK="%{$fg_bold[green]%}[$CHECK]%{$reset_color%}"
-  RPS1="${${KEYMAP/vicmd/$VIM_PROMPT}/(main|viins)/}${vcs_info_msg_0_/"[]"/"$GREEN_CHECK"}$EPS1"
+  RPS1="${${KEYMAP/vicmd/$VIM_PROMPT}/(main|viins)/}$EPS1"
   zle reset-prompt
 }
 
@@ -63,13 +57,16 @@ BLACK_STAR="\u2605"
 
 export PS1="%(?.%{$fg_bold[blue]%}.%{$fg_bold[red]%})%~ %{$bg[bg_default]$fg[green]%}"$(print $BLACK_STAR)" %{$reset_color%}"
 
-alias ls='ls -G'
+alias ls='eza'
 
 ###############
 # git aliases #
 ###############
 # rebase onto master
 alias grbm='git rebase master'
+# switch
+alias gs='git switch'
+alias gs-'git switch -'
 # checkout
 alias gc-='git co -'
 alias gco='git co'
@@ -77,12 +74,39 @@ alias gcom='git co master'
 alias gcb='git cob'
 # status
 alias gst='git status'
+# pull
+alias gp='git pull'
 # log
 alias gl='git log'
 # commit
 alias gci='git commit'
-alias first='en dev-fir-us kst'
 
-function firsh() {
-  en dev-fir-us kssh $@
+###-begin-codefresh-completions-###
+#
+# codefresh command completion script
+#
+# Installation: codefresh completion zsh >> ~/.zshrc
+#
+_codefresh_completions()
+{
+    type_list=($(codefresh --impl-zsh-file-dir --get-yargs-completions "${words[@]}"))
+
+    if [[ ${type_list[1]} == '__files_completion__' ]]; then
+        compadd -- "${type_list[@]:1}"
+    else
+        compadd -- "${type_list[@]}"
+    fi
+
+    return 0
 }
+compdef _codefresh_completions codefresh
+###-end-codefresh-completions-###
+
+
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /usr/local/bin/mc mc
+source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+[ -f ~/.kubectl_aliases ] && source ~/.kubectl_aliases
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
