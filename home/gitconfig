@@ -1,7 +1,24 @@
+[include]
+  path = ~/projects/github/delta/catppuccin.gitconfig
+
 [core]
   excludesfile = ~/.gitignore_global
+  pager = delta -s
+
+[delta]
+  features = catppuccin-frappe
+
+[interactive]
+  diffFilter = delta --color-only
+
 [commit]
   template = ~/.gitmessage
+
 [alias]
   co = checkout
   cob = checkout -b
+
+[user]
+  name = Brian Stakes
+  email = brian.stakes@gmail.com
+
