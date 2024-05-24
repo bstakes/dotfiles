@@ -2,7 +2,7 @@
 
 if  [[ "$OSTYPE" = darwin* ]]; then
   # install homebrew
-  hash brew 2>/dev/null || { ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" && echo "Please agree to the Xcode license." && sudo xcodebuild -license }
+  hash brew 2>/dev/null || { /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" && echo "Please agree to the Xcode license." && sudo xcodebuild -license }
   brew update
   brew upgrade
   brew bundle
@@ -17,4 +17,8 @@ else
   echo "Not on macOS. Skipping mac packages."
 fi
 
+mkdir -p ~/projects/github
+
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+git clone https://github.com/catppuccin/delta ~/projects/github/delta
 ./install-fonts.sh
