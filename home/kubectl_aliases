@@ -1,0 +1,9 @@
+alias k='kubectl'
+alias kg='kubectl get'
+alias kgpo='kubectl get po'
+alias kgsvc='kubectl get svc'
+alias kgdep='kubectl get deployment'
+alias kd='kubectl describe'
+alias kdpo='kubectl describe po'
+alias kl='kubectl logs'
+
